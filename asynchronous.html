@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Asynchronous JavaScript</title>
+</head>
+<body>
+    <h1>Asynchronous JavaScript</h1>
+    <script>
+        // let second = () => {
+        //  setTimeout(() => {
+        //      console.log('Async hello world');
+        //  }, 2000);
+        // }
+
+     //    let first = () => {
+     //     console.log('hey there');
+     //     second()
+     //    }
+     //     console.log('the end')
+
+     //    first()
+
+     // function getRecipe() {
+     //     setTimeout(() => {
+     //         let recipeID = [324, 234, 677, 782];
+     //         console.log(recipeID);
+
+     //         setTimeout((id) => {
+     //             let recipe = {
+     //                 title: 'Fresh Tomato paste',
+     //                 publisher: 'Fernando'
+     //             };
+
+     //             console.log(`${id}: ${recipe.title}`);
+
+     //             setTimeout(publisher => {
+     //                 let recipe2 = {
+     //                     title: 'italian pizza',
+     //                     publisher: 'Jonas'
+     //                 };
+     //                 console.log(recipe);
+     //             }, 1500, recipe.publisher);
+
+     //         }, 1500, recipeID[3]);
+
+     //     }, 1500); 
+
+     // }
+
+     // getRecipe()
+
+     // let getIDs = new Promise((resolve, reject) => {
+     //     setTimeout(() => {
+     //         resolve([234, 5567, 443, 908]);
+     //     }, 1500);
+     // });
+
+     // let getRecipe = recID => {
+     //     return new Promise((resolve, reject) => {
+     //         setTimeout(ID => {
+     //             const recipe = {
+     //                 title: 'Fresh Tomato',
+     //                 publisher: 'Fernando'
+     //             };
+     //             resolve(`${ID}: ${recipe.title}`);
+     //         }, 1500, recID);
+     //     });
+     // }
+
+     // let getRelated = publisher => {
+     //     return new Promise((resolve, reject) => {
+     //         setTimeout(pub => {
+     //             let recipe = {
+     //                 title: 'Fresh Tomato',
+     //                 publisher: 'Fernando'
+     //             };
+     //             resolve(`${pub}: ${recipe.title}`)
+     //         }, 1500, publisher);
+     //     });
+     // }
+
+        // getIDs
+        // .then(ids => {
+        //  console.log(ids);
+        //  return getRecipe(ids[2]);
+        // })
+        // .then(recipe => {
+        //  console.log(recipe);
+        //  return getRelated('Fernando');
+        // })
+        // .then(recipe => {
+        //  console.log(recipe);
+        // })
+        // .catch(err => {
+        //  console.log('Error!');
+        // })
+    
+
+        // async function getRecipeAW() {
+        //  const IDs = await getIDs;
+        //  console.log(IDs);
+        //  const recipe = await getRecipe(IDs[3]);
+        //  console.log(recipe);
+        //  const related = await getRelated('Fernando');
+        //  console.log(related);
+
+        //  return recipe
+        // }
+
+        // getRecipeAW().then(result => console.log(`${result} is the best ever!`));
+
+        function getWeather(woeid) {
+            fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)        
+            .then(result => {
+                // console.log(result);
+                return result.json();
+            })
+            .then(data =>  {
+                // console.log(data);
+                const today = data.consolidated_weather[0];
+                // console.log(`Temperatures in ${data.title} stay betweeen ${today.min_temp} and ${today.max_temp}.`)
+            })
+            .catch(error => console.log(error));
+        }
+
+        getWeather(2487956);
+        getWeather(44418);
+
+
+        async function getWeatherAW(woeid) {
+            try {
+                const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+                const data = await result.json();        
+                const tomorrow = data.consolidated_weather[1];
+                console.log(`Temperatures tomorrow in ${data.title} stay betweeen ${tomorrow.min_temp} and ${tomorrow.max_temp}.`)
+                return data
+            } catch(error) {
+                alert(error);
+            }
+        }
+        getWeatherAW(2487956);
+
+        let dataLondon;
+        getWeatherAW(44418).then(data => {
+            dataLondon = data;
+            console.log(dataLondon);
+        });
+
+    </script>
+</body>
+</html>
